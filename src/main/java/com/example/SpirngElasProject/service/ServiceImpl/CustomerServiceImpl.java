@@ -138,6 +138,7 @@ public class CustomerServiceImpl implements CustomerService {
     public JsonNode completeSugMultiField(String prefix) throws IOException {
 
         List<String> returnList = new ArrayList<>();
+        Integer size = 2;
 
         //Initialize SearchRequest
         SearchRequest searchRequest = new SearchRequest("coresupplier");
@@ -147,19 +148,19 @@ public class CustomerServiceImpl implements CustomerService {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         //Initialize CompletionSuggestionBuilder                  //Specify field and prefix
-        CompletionSuggestionBuilder supplierName = SuggestBuilders.completionSuggestion("coreOrganizationNames.supplierName").text(prefix).size(3);
-        CompletionSuggestionBuilder productKeyword = SuggestBuilders.completionSuggestion("productKeyword").text(prefix).size(3);
-        CompletionSuggestionBuilder orgId = SuggestBuilders.completionSuggestion("orgId").text(prefix).size(3);
-        CompletionSuggestionBuilder branch = SuggestBuilders.completionSuggestion("branch").text(prefix).size(3);
-        CompletionSuggestionBuilder businessEntityName = SuggestBuilders.completionSuggestion("coreBusinessEntity.coreBusinessEntityNames.businessEntityName").text(prefix).size(3);
-        CompletionSuggestionBuilder countryName = SuggestBuilders.completionSuggestion("coreCountry.coreCountryNames.countryName").text(prefix).size(3);
-        CompletionSuggestionBuilder stateName = SuggestBuilders.completionSuggestion("coreState.coreStateNames.stateName").text(prefix).size(3);
-//        CompletionSuggestionBuilder categoryNameLev3 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryNameLev3s.categoryNameLev3").text(prefix).size(3);
-//        CompletionSuggestionBuilder categoryDescLev3 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryNameLev3s.categoryDescLev3").text(prefix).size(3);
-//        CompletionSuggestionBuilder categoryNameLev2 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryNameLev2s.categoryNameLev2").text(prefix).size(3);
-//        CompletionSuggestionBuilder categoryDescLev2 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryNameLev2s.categoryDescLev2").text(prefix).size(3);
-//        CompletionSuggestionBuilder categoryNameLev1 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryLev1.coreProductCategoryNameLev1s.categoryNameLev1").text(prefix).size(3);
-//        CompletionSuggestionBuilder categoryDescLev1 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryLev1.coreProductCategoryNameLev1s.categoryDescLev1").text(prefix).size(3);
+        CompletionSuggestionBuilder supplierName = SuggestBuilders.completionSuggestion("coreOrganizationNames.supplierName").text(prefix).size(size);
+        CompletionSuggestionBuilder productKeyword = SuggestBuilders.completionSuggestion("productKeyword").text(prefix).size(size);
+        CompletionSuggestionBuilder orgId = SuggestBuilders.completionSuggestion("orgId").text(prefix).size(size);
+        CompletionSuggestionBuilder branch = SuggestBuilders.completionSuggestion("branch").text(prefix).size(size);
+        CompletionSuggestionBuilder businessEntityName = SuggestBuilders.completionSuggestion("coreBusinessEntity.coreBusinessEntityNames.businessEntityName").text(prefix).size(size);
+        CompletionSuggestionBuilder countryName = SuggestBuilders.completionSuggestion("coreCountry.coreCountryNames.countryName").text(prefix).size(size);
+        CompletionSuggestionBuilder stateName = SuggestBuilders.completionSuggestion("coreState.coreStateNames.stateName").text(prefix).size(size);
+        CompletionSuggestionBuilder categoryNameLev3 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryNameLev3s.categoryNameLev3").text(prefix).size(size);
+        CompletionSuggestionBuilder categoryDescLev3 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryNameLev3s.categoryDescLev3").text(prefix).size(size);
+        CompletionSuggestionBuilder categoryNameLev2 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryNameLev2s.categoryNameLev2").text(prefix).size(size);
+        CompletionSuggestionBuilder categoryDescLev2 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryNameLev2s.categoryDescLev2").text(prefix).size(size);
+//        CompletionSuggestionBuilder categoryNameLev1 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryLev1.coreProductCategoryNameLev1s.categoryNameLev1").text(prefix).size(size);
+//        CompletionSuggestionBuilder categoryDescLev1 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryLev1.coreProductCategoryNameLev1s.categoryDescLev1").text(prefix).size(size);
 
         //Initialize suggestBuilder
         SuggestBuilder suggestBuilder = new SuggestBuilder();
@@ -172,10 +173,10 @@ public class CustomerServiceImpl implements CustomerService {
         suggestBuilder.addSuggestion("BusinessEntityName", businessEntityName);
         suggestBuilder.addSuggestion("CountryName", countryName);
         suggestBuilder.addSuggestion("StateName", stateName);
-//        suggestBuilder.addSuggestion("CategoryNameLev3", categoryNameLev3);
-//        suggestBuilder.addSuggestion("CategoryDescLev3", categoryDescLev3);
-//        suggestBuilder.addSuggestion("CategoryNameLev2", categoryNameLev2);
-//        suggestBuilder.addSuggestion("CategoryDescLev2", categoryDescLev2);
+        suggestBuilder.addSuggestion("CategoryNameLev3", categoryNameLev3);
+        suggestBuilder.addSuggestion("CategoryDescLev3", categoryDescLev3);
+        suggestBuilder.addSuggestion("CategoryNameLev2", categoryNameLev2);
+        suggestBuilder.addSuggestion("CategoryDescLev2", categoryDescLev2);
 //        suggestBuilder.addSuggestion("CategoryNameLev1", categoryNameLev1);
 //        suggestBuilder.addSuggestion("CategoryDescLev1", categoryDescLev1);
 
