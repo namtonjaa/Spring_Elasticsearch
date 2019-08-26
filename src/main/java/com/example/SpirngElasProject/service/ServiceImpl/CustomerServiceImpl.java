@@ -147,7 +147,7 @@ public class CustomerServiceImpl implements CustomerService {
         //Initialize searchSourceBuilder
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        //Initialize CompletionSuggestionBuilder                  //Specify field and prefix
+        //Initialize CompletionSuggestionBuilder   //Specify field and prefix
         CompletionSuggestionBuilder supplierName = SuggestBuilders.completionSuggestion("coreOrganizationNames.supplierName").text(prefix).size(size);
         CompletionSuggestionBuilder productKeyword = SuggestBuilders.completionSuggestion("productKeyword").text(prefix).size(size);
         CompletionSuggestionBuilder orgId = SuggestBuilders.completionSuggestion("orgId").text(prefix).size(size);
@@ -207,12 +207,4 @@ public class CustomerServiceImpl implements CustomerService {
 
         return actualObj;
     }
-
-//		Suggest suggest = searchResponse.getSuggest();
-//		CompletionSuggestion suggestion = suggest.getSuggestion("SUGGESTION");
-//		for (CompletionSuggestion.Entry entry : suggestion.getEntries()) {
-//			for (CompletionSuggestion.Entry.Option option : entry) {
-//				suggestionList.add(option.getText().toString());
-//			}
-//		}
 }

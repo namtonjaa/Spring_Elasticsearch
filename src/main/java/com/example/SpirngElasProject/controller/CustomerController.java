@@ -59,7 +59,7 @@ public class CustomerController {
         return ResponseEntity.ok(suggestions);
     }
 
-    @GetMapping("/completeMultiField/{text}")
+    @GetMapping("/completionMultiField/{text}")
     public ResponseEntity<?> completeSugMultiField(@PathVariable String text) throws IOException {
         JsonNode suggestions = customerService.completeSugMultiField(text);
         return ResponseEntity.ok(suggestions);
