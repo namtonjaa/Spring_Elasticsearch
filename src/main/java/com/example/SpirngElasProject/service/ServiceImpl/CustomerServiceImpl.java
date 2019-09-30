@@ -16,6 +16,7 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.ScoreSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.search.suggest.Suggest;
@@ -74,7 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     public JsonNode completionSuggestion(String prefix) throws IOException {
 
-        String textForJSON = new String();
+        String textForJSON;
 
         List<String> returnList = new ArrayList<>();
 
@@ -86,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         //Initialize CompletionSuggestionBuilder                  Initialize field and prefix
-        CompletionSuggestionBuilder completionSuggestionBuilder = SuggestBuilders.completionSuggestion("name").prefix(prefix).size(3);
+        CompletionSuggestionBuilder completionSuggestionBuilder = SuggestBuilders.completionSuggestion("name.completion").prefix(prefix).size(3);
 
         //Initialize suggestBuilder
         SuggestBuilder suggestBuilder = new SuggestBuilder();
@@ -95,6 +96,7 @@ public class CustomerServiceImpl implements CustomerService {
         suggestBuilder.addSuggestion("SUGGESTION", completionSuggestionBuilder);
 
         searchSourceBuilder.suggest(suggestBuilder);
+        searchSourceBuilder.sort(new FieldSortBuilder("_id").order(SortOrder.ASC));
 
         //Add the SearchSourceBuilder to searchRequest
         searchRequest.source(searchSourceBuilder);
@@ -141,24 +143,30 @@ public class CustomerServiceImpl implements CustomerService {
         Integer size = 2;
 
         //Initialize SearchRequest
-        SearchRequest searchRequest = new SearchRequest("coresupplier");
-        searchRequest.types("core_organization");
+//        SearchRequest searchRequest = new SearchRequest("coresupplier");
+//        searchRequest.types("core_organization");
+
+        SearchRequest searchRequest = new SearchRequest("customer");
+        searchRequest.types("article");
 
         //Initialize searchSourceBuilder
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         //Initialize CompletionSuggestionBuilder   //Specify field and prefix
-        CompletionSuggestionBuilder supplierName = SuggestBuilders.completionSuggestion("coreOrganizationNames.supplierName").text(prefix).size(size);
-        CompletionSuggestionBuilder productKeyword = SuggestBuilders.completionSuggestion("productKeyword").text(prefix).size(size);
-        CompletionSuggestionBuilder orgId = SuggestBuilders.completionSuggestion("orgId").text(prefix).size(size);
-        CompletionSuggestionBuilder branch = SuggestBuilders.completionSuggestion("branch").text(prefix).size(size);
-        CompletionSuggestionBuilder businessEntityName = SuggestBuilders.completionSuggestion("coreBusinessEntity.coreBusinessEntityNames.businessEntityName").text(prefix).size(size);
-        CompletionSuggestionBuilder countryName = SuggestBuilders.completionSuggestion("coreCountry.coreCountryNames.countryName").text(prefix).size(size);
-        CompletionSuggestionBuilder stateName = SuggestBuilders.completionSuggestion("coreState.coreStateNames.stateName").text(prefix).size(size);
-        CompletionSuggestionBuilder categoryNameLev3 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryNameLev3s.categoryNameLev3").text(prefix).size(size);
-        CompletionSuggestionBuilder categoryDescLev3 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryNameLev3s.categoryDescLev3").text(prefix).size(size);
-        CompletionSuggestionBuilder categoryNameLev2 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryNameLev2s.categoryNameLev2").text(prefix).size(size);
-        CompletionSuggestionBuilder categoryDescLev2 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryNameLev2s.categoryDescLev2").text(prefix).size(size);
+        CompletionSuggestionBuilder name = SuggestBuilders.completionSuggestion("name.completion").prefix(prefix).size(3);
+        CompletionSuggestionBuilder email = SuggestBuilders.completionSuggestion("email.completion").prefix(prefix).size(3);
+
+//        CompletionSuggestionBuilder supplierName = SuggestBuilders.completionSuggestion("coreOrganizationNames.supplierName").text(prefix).size(size);
+//        CompletionSuggestionBuilder productKeyword = SuggestBuilders.completionSuggestion("productKeyword").text(prefix).size(size);
+//        CompletionSuggestionBuilder orgId = SuggestBuilders.completionSuggestion("orgId").text(prefix).size(size);
+//        CompletionSuggestionBuilder branch = SuggestBuilders.completionSuggestion("branch").text(prefix).size(size);
+//        CompletionSuggestionBuilder businessEntityName = SuggestBuilders.completionSuggestion("coreBusinessEntity.coreBusinessEntityNames.businessEntityName").text(prefix).size(size);
+//        CompletionSuggestionBuilder countryName = SuggestBuilders.completionSuggestion("coreCountry.coreCountryNames.countryName").text(prefix).size(size);
+//        CompletionSuggestionBuilder stateName = SuggestBuilders.completionSuggestion("coreState.coreStateNames.stateName").text(prefix).size(size);
+//        CompletionSuggestionBuilder categoryNameLev3 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryNameLev3s.categoryNameLev3").text(prefix).size(size);
+//        CompletionSuggestionBuilder categoryDescLev3 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryNameLev3s.categoryDescLev3").text(prefix).size(size);
+//        CompletionSuggestionBuilder categoryNameLev2 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryNameLev2s.categoryNameLev2").text(prefix).size(size);
+//        CompletionSuggestionBuilder categoryDescLev2 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryNameLev2s.categoryDescLev2").text(prefix).size(size);
 //        CompletionSuggestionBuilder categoryNameLev1 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryLev1.coreProductCategoryNameLev1s.categoryNameLev1").text(prefix).size(size);
 //        CompletionSuggestionBuilder categoryDescLev1 = SuggestBuilders.completionSuggestion("coreOrgProductCategories.coreProductCategoryLev3.coreProductCategoryLev2.coreProductCategoryLev1.coreProductCategoryNameLev1s.categoryDescLev1").text(prefix).size(size);
 
@@ -166,17 +174,19 @@ public class CustomerServiceImpl implements CustomerService {
         SuggestBuilder suggestBuilder = new SuggestBuilder();
 
         //Add suggestBuilder into the tag of 'suggest'
-        suggestBuilder.addSuggestion("SupplierName", supplierName);
-        suggestBuilder.addSuggestion("ProductKeyword", productKeyword);
-        suggestBuilder.addSuggestion("OrgId", orgId);
-        suggestBuilder.addSuggestion("Branch", branch);
-        suggestBuilder.addSuggestion("BusinessEntityName", businessEntityName);
-        suggestBuilder.addSuggestion("CountryName", countryName);
-        suggestBuilder.addSuggestion("StateName", stateName);
-        suggestBuilder.addSuggestion("CategoryNameLev3", categoryNameLev3);
-        suggestBuilder.addSuggestion("CategoryDescLev3", categoryDescLev3);
-        suggestBuilder.addSuggestion("CategoryNameLev2", categoryNameLev2);
-        suggestBuilder.addSuggestion("CategoryDescLev2", categoryDescLev2);
+        suggestBuilder.addSuggestion("Name", name);
+        suggestBuilder.addSuggestion("Email", email);
+//        suggestBuilder.addSuggestion("SupplierName", supplierName);
+//        suggestBuilder.addSuggestion("ProductKeyword", productKeyword);
+//        suggestBuilder.addSuggestion("OrgId", orgId);
+//        suggestBuilder.addSuggestion("Branch", branch);
+//        suggestBuilder.addSuggestion("BusinessEntityName", businessEntityName);
+//        suggestBuilder.addSuggestion("CountryName", countryName);
+//        suggestBuilder.addSuggestion("StateName", stateName);
+//        suggestBuilder.addSuggestion("CategoryNameLev3", categoryNameLev3);
+//        suggestBuilder.addSuggestion("CategoryDescLev3", categoryDescLev3);
+//        suggestBuilder.addSuggestion("CategoryNameLev2", categoryNameLev2);
+//        suggestBuilder.addSuggestion("CategoryDescLev2", categoryDescLev2);
 //        suggestBuilder.addSuggestion("CategoryNameLev1", categoryNameLev1);
 //        suggestBuilder.addSuggestion("CategoryDescLev1", categoryDescLev1);
 

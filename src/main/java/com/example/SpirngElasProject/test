@@ -1,0 +1,18 @@
+  transform(value: string, args: string): string {
+    if (!args) { return value; }
+    if (args.trim().length > 0) {
+      const textSplit = args.split(' ');
+      textSplit.forEach((item: string) => {
+        let index = value.toLowerCase().indexOf(item.toLowerCase());
+        let text = CoreConstant.Empty;
+        if (index > -1 && item.trim().length > 0) {
+          text = value.substring(index, index + item.length);
+          const re = new RegExp(item, 'gi');
+          value = value.replace(re, "<span class='mark-style'>" + text + '</span>');
+        }
+      })
+      return value;
+    } else {
+      return value;
+    }
+  }
